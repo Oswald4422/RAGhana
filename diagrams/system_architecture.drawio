@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+  <root>
+    <mxCell id="0" />
+    <mxCell id="1" parent="0" />
+
+    <!-- Title -->
+    <mxCell id="title" value="RAGhana — System Architecture" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="477" y="30" width="700" height="40" as="geometry" />
+    </mxCell>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- LAYER 1: DATA SOURCES                       -->
+    <!-- ═══════════════════════════════════════════ -->
+    <mxCell id="ds_group" value="Data Sources" style="swimlane;startSize=30;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+      <mxGeometry x="80" y="100" width="340" height="160" as="geometry" />
+    </mxCell>
+
+    <mxCell id="csv" value="Ghana Election Results&#xa;(CSV)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="ds_group">
+      <mxGeometry x="30" y="60" width="130" height="70" as="geometry" />
+    </mxCell>
+
+    <mxCell id="pdf" value="National Budget&#xa;(PDF)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="ds_group">
+      <mxGeometry x="180" y="60" width="130" height="70" as="geometry" />
+    </mxCell>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- LAYER 2: BACKEND PIPELINE                   -->
+    <!-- ═══════════════════════════════════════════ -->
+    <mxCell id="bp_group" value="Backend Pipeline" style="swimlane;startSize=30;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+      <mxGeometry x="80" y="320" width="1000" height="380" as="geometry" />
+    </mxCell>
+
+    <!-- Offline sub-group -->
+    <mxCell id="offline_group" value="Offline Indexing" style="swimlane;startSize=25;fillColor=#f9dbc8;strokeColor=#d6b656;fontStyle=2;fontSize=11;" vertex="1" parent="bp_group">
+      <mxGeometry x="20" y="50" width="580" height="300" as="geometry" />
+    </mxCell>
+
+    <mxCell id="ingest" value="Ingestion &amp; Cleaning" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="offline_group">
+      <mxGeometry x="30" y="60" width="140" height="60" as="geometry" />
+    </mxCell>
+
+    <mxCell id="chunk" value="Chunking&#xa;(row-group / paragraph)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="offline_group">
+      <mxGeometry x="210" y="60" width="140" height="60" as="geometry" />
+    </mxCell>
+
+    <mxCell id="embed_idx" value="Embedding&#xa;(Dense Vectors)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="offline_group">
+      <mxGeometry x="30" y="180" width="140" height="60" as="geometry" />
+    </mxCell>
+
+    <mxCell id="bm25" value="BM25 Index" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="offline_group">
+      <mxGeometry x="210" y="180" width="130" height="60" as="geometry" />
+    </mxCell>
+
+    <mxCell id="vecstore" value="Vector Store" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="offline_group">
+      <mxGeometry x="370" y="180" width="130" height="60" as="geometry" />
+    </mxCell>
+
+    <!-- arrows inside offline -->
+    <mxCell id="e_ing_chk" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="ingest" target="chunk" parent="offline_group">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e_chk_emb" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="chunk" target="embed_idx" parent="offline_group">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e_chk_bm" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="chunk" target="bm25" parent="offline_group">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e_chk_vec" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="chunk" target="vecstore" parent="offline_group">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- Online sub-group -->
+    <mxCell id="online_group" value="Online Query Processing" style="swimlane;startSize=25;fillColor=#e1d5e7;strokeColor=#9673a6;fontStyle=2;fontSize=11;" vertex="1" parent="bp_group">
+      <mxGeometry x="620" y="50" width="360" height="300" as="geometry" />
+    </mxCell>
+
+    <mxCell id="hybrid" value="Hybrid Retrieval&#xa;(BM25 + Vector)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e8ff;strokeColor=#9673a6;fontSize=11;" vertex="1" parent="online_group">
+      <mxGeometry x="110" y="55" width="140" height="60" as="geometry" />
+    </mxCell>
+
+    <mxCell id="reasoning" value="Multi-Step Numeric&#xa;Reasoning" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e8ff;strokeColor=#9673a6;fontSize=11;" vertex="1" parent="online_group">
+      <mxGeometry x="110" y="150" width="140" height="60" as="geometry" />
+    </mxCell>
+
+    <mxCell id="prompt" value="Prompt Construction" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e8ff;strokeColor=#9673a6;fontSize=11;" vertex="1" parent="online_group">
+      <mxGeometry x="110" y="230" width="140" height="50" as="geometry" />
+    </mxCell>
+
+    <mxCell id="e_hyb_res" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="hybrid" target="reasoning" parent="online_group">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e_res_prm" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="reasoning" target="prompt" parent="online_group">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- LAYER 3: API LAYER                          -->
+    <!-- ═══════════════════════════════════════════ -->
+    <mxCell id="api_group" value="API Layer (FastAPI)" style="swimlane;startSize=30;fillColor=#f8cecc;strokeColor=#b85450;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+      <mxGeometry x="500" y="760" width="440" height="140" as="geometry" />
+    </mxCell>
+
+    <mxCell id="rag_ep" value="/query/rag&#xa;(RAG endpoint)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#b85450;fontSize=11;" vertex="1" parent="api_group">
+      <mxGeometry x="40" y="55" width="150" height="60" as="geometry" />
+    </mxCell>
+
+    <mxCell id="llm_ep" value="/query/llm&#xa;(Pure-LLM endpoint)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#b85450;fontSize=11;" vertex="1" parent="api_group">
+      <mxGeometry x="240" y="55" width="150" height="60" as="geometry" />
+    </mxCell>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- LAYER 4: LLM                                -->
+    <!-- ═══════════════════════════════════════════ -->
+    <mxCell id="llm" value="LLM&#xa;(Grounded Generation)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+      <mxGeometry x="1160" y="420" width="200" height="100" as="geometry" />
+    </mxCell>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- LAYER 5: FRONTEND                           -->
+    <!-- ═══════════════════════════════════════════ -->
+    <mxCell id="frontend" value="Frontend (React UI)&#xa;Query Input · Results · Visualizations" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f0f0f0;strokeColor=#666666;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="500" y="970" width="440" height="80" as="geometry" />
+    </mxCell>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- LAYER 6: ARTIFACTS                          -->
+    <!-- ═══════════════════════════════════════════ -->
+    <mxCell id="artifacts" value="Artifacts&#xa;(Embeddings · Indexes · Logs)" style="shape=cylinder3;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="1160" y="580" width="200" height="100" as="geometry" />
+    </mxCell>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- CROSS-LAYER EDGES                           -->
+    <!-- ═══════════════════════════════════════════ -->
+
+    <!-- Data Sources → Backend Pipeline -->
+    <mxCell id="e_csv_bp" style="edgeStyle=orthogonalEdgeStyle;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" source="csv" target="ingest" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e_pdf_bp" style="edgeStyle=orthogonalEdgeStyle;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" source="pdf" target="ingest" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- Offline indexes feed Hybrid Retrieval -->
+    <mxCell id="e_bm_hyb" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="bm25" target="hybrid" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e_vec_hyb" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="vecstore" target="hybrid" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- Prompt → API -->
+    <mxCell id="e_prm_api" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="prompt" target="rag_ep" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- API → LLM -->
+    <mxCell id="e_api_llm" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="rag_ep" target="llm" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e_api_llm2" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="llm_ep" target="llm" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- LLM → Artifacts -->
+    <mxCell id="e_llm_art" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="llm" target="artifacts" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- API ↔ Frontend -->
+    <mxCell id="e_api_fe" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="api_group" target="frontend" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e_fe_api" style="edgeStyle=orthogonalEdgeStyle;dashed=1;" edge="1" source="frontend" target="api_group" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- Artifacts persist from offline -->
+    <mxCell id="e_emb_art" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="embed_idx" target="artifacts" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+  </root>
+</mxGraphModel>

@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+  <root>
+    <mxCell id="0" />
+    <mxCell id="1" parent="0" />
+
+    <!-- Title -->
+    <mxCell id="title" value="RAGhana — Data Flow Diagram" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="477" y="30" width="700" height="40" as="geometry" />
+    </mxCell>
+
+    <!-- ══════════════════════════════════════════════════════════ -->
+    <!-- PHASE 1: OFFLINE INDEXING (LEFT COLUMN)                   -->
+    <!-- ══════════════════════════════════════════════════════════ -->
+
+    <mxCell id="phase1_header" value="① OFFLINE INDEXING" style="text;html=1;strokeColor=none;fillColor=#d5e8d4;align=center;verticalAlign=middle;rounded=1;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+      <mxGeometry x="80" y="100" width="440" height="45" as="geometry" />
+    </mxCell>
+
+    <!-- Step 1.1 -->
+    <mxCell id="raw_data" value="Raw Data Sources&#xa;(CSV · PDF)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="160" y="185" width="280" height="60" as="geometry" />
+    </mxCell>
+
+    <mxCell id="a1" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="raw_data" target="clean" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- Step 1.2 -->
+    <mxCell id="clean" value="Ingestion &amp; Cleaning" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;" vertex="1" parent="1">
+      <mxGeometry x="160" y="295" width="280" height="60" as="geometry" />
+    </mxCell>
+
+    <mxCell id="a2" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="clean" target="chunk" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- Step 1.3 -->
+    <mxCell id="chunk" value="Chunking&#xa;Row-group (CSV) · Paragraph-boundary (PDF)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;" vertex="1" parent="1">
+      <mxGeometry x="160" y="405" width="280" height="70" as="geometry" />
+    </mxCell>
+
+    <!-- Chunk fans out to two parallel steps -->
+    <mxCell id="a3a" value="" style="edgeStyle=orthogonalEdgeStyle;exitX=0.3;exitY=1;exitDx=0;exitDy=0;" edge="1" source="chunk" target="embed" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="a3b" value="" style="edgeStyle=orthogonalEdgeStyle;exitX=0.7;exitY=1;exitDx=0;exitDy=0;" edge="1" source="chunk" target="bm25" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- Step 1.4a -->
+    <mxCell id="embed" value="Embedding&#xa;(Dense Vectors)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;" vertex="1" parent="1">
+      <mxGeometry x="80" y="530" width="180" height="65" as="geometry" />
+    </mxCell>
+
+    <!-- Step 1.4b -->
+    <mxCell id="bm25" value="BM25 Indexing" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;" vertex="1" parent="1">
+      <mxGeometry x="340" y="530" width="180" height="65" as="geometry" />
+    </mxCell>
+
+    <mxCell id="a4a" value="" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="embed" target="vecstore" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="a4b" value="" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="bm25" target="bm25store" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- Step 1.5a -->
+    <mxCell id="vecstore" value="Vector Store" style="shape=cylinder3;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="80" y="650" width="180" height="80" as="geometry" />
+    </mxCell>
+
+    <!-- Step 1.5b -->
+    <mxCell id="bm25store" value="BM25 Index Store" style="shape=cylinder3;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="340" y="650" width="180" height="80" as="geometry" />
+    </mxCell>
+
+    <!-- Serialization note -->
+    <mxCell id="serial" value="Artifacts Serialized to Disk&#xa;(embeddings · indexes · logs)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f0f0f0;strokeColor=#666666;fontSize=11;fontStyle=2;" vertex="1" parent="1">
+      <mxGeometry x="80" y="790" width="440" height="55" as="geometry" />
+    </mxCell>
+
+    <mxCell id="a5a" value="" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="vecstore" target="serial" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="a5b" value="" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="bm25store" target="serial" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- ══════════════════════════════════════════════════════════ -->
+    <!-- PHASE 2: ONLINE QUERY PROCESSING (RIGHT COLUMN)           -->
+    <!-- ══════════════════════════════════════════════════════════ -->
+
+    <mxCell id="phase2_header" value="② ONLINE QUERY PROCESSING" style="text;html=1;strokeColor=none;fillColor=#e1d5e7;align=center;verticalAlign=middle;rounded=1;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+      <mxGeometry x="620" y="100" width="520" height="45" as="geometry" />
+    </mxCell>
+
+    <!-- Step 2.1 -->
+    <mxCell id="user" value="User (Frontend)&#xa;Submits Query" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="740" y="175" width="240" height="75" as="geometry" />
+    </mxCell>
+
+    <mxCell id="b1" value="" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="user" target="api" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- Step 2.2 -->
+    <mxCell id="api" value="FastAPI Backend&#xa;Receives &amp; Routes Query" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12;" vertex="1" parent="1">
+      <mxGeometry x="740" y="295" width="240" height="65" as="geometry" />
+    </mxCell>
+
+    <mxCell id="b2" value="" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="api" target="embed_q" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- Step 2.3 -->
+    <mxCell id="embed_q" value="Query Embedding" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=12;" vertex="1" parent="1">
+      <mxGeometry x="740" y="405" width="240" height="65" as="geometry" />
+    </mxCell>
+
+    <mxCell id="b3" value="" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="embed_q" target="hybrid_ret" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- Step 2.4 — retrieval also pulls from stores -->
+    <mxCell id="hybrid_ret" value="Hybrid Retrieval&#xa;BM25 + Vector (Chunk Ranking)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=12;" vertex="1" parent="1">
+      <mxGeometry x="740" y="515" width="280" height="70" as="geometry" />
+    </mxCell>
+
+    <!-- Cross-arrows from stores to retrieval -->
+    <mxCell id="store_to_ret1" value="at query time" style="edgeStyle=orthogonalEdgeStyle;dashed=1;fontSize=9;" edge="1" source="vecstore" target="hybrid_ret" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="store_to_ret2" value="at query time" style="edgeStyle=orthogonalEdgeStyle;dashed=1;fontSize=9;" edge="1" source="bm25store" target="hybrid_ret" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <mxCell id="b4" value="" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="hybrid_ret" target="numeric" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- Step 2.5 -->
+    <mxCell id="numeric" value="Multi-Step Numeric Reasoning&#xa;(Deterministic, outside LLM)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=12;" vertex="1" parent="1">
+      <mxGeometry x="740" y="635" width="280" height="70" as="geometry" />
+    </mxCell>
+
+    <mxCell id="b5" value="" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="numeric" target="prompt_c" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- Step 2.6 -->
+    <mxCell id="prompt_c" value="Prompt Construction&#xa;(Context + Query)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=12;" vertex="1" parent="1">
+      <mxGeometry x="740" y="755" width="280" height="65" as="geometry" />
+    </mxCell>
+
+    <mxCell id="b6" value="" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="prompt_c" target="llm" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- Step 2.7 -->
+    <mxCell id="llm" value="LLM&#xa;Grounded Answer Generation" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+      <mxGeometry x="760" y="870" width="240" height="90" as="geometry" />
+    </mxCell>
+
+    <mxCell id="b7" value="" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="llm" target="response" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- Step 2.8 -->
+    <mxCell id="response" value="Response&#xa;(Answer · Evidence · Timing Metadata)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12;" vertex="1" parent="1">
+      <mxGeometry x="740" y="1010" width="280" height="65" as="geometry" />
+    </mxCell>
+
+    <mxCell id="b8" value="" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="response" target="user_display" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- Step 2.9 -->
+    <mxCell id="user_display" value="Frontend Display&#xa;Result Visualization to User" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="760" y="1120" width="240" height="75" as="geometry" />
+    </mxCell>
+
+    <!-- ═══════════════════════════════════════ -->
+    <!-- LEGEND                                  -->
+    <!-- ═══════════════════════════════════════ -->
+    <mxCell id="legend" value="Legend" style="swimlane;startSize=25;fillColor=#f5f5f5;strokeColor=#666666;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+      <mxGeometry x="1200" y="180" width="280" height="220" as="geometry" />
+    </mxCell>
+
+    <mxCell id="l1" value="Solid arrow: primary data flow" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=11;" vertex="1" parent="legend">
+      <mxGeometry x="10" y="40" width="260" height="30" as="geometry" />
+    </mxCell>
+    <mxCell id="l2" value="Dashed arrow: on-demand lookup" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=11;" vertex="1" parent="legend">
+      <mxGeometry x="10" y="80" width="260" height="30" as="geometry" />
+    </mxCell>
+    <mxCell id="l3" value="Blue fill: storage / data" style="rounded=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="legend">
+      <mxGeometry x="10" y="120" width="120" height="30" as="geometry" />
+    </mxCell>
+    <mxCell id="l4" value="Purple fill: query pipeline" style="rounded=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;" vertex="1" parent="legend">
+      <mxGeometry x="150" y="120" width="120" height="30" as="geometry" />
+    </mxCell>
+    <mxCell id="l5" value="Orange fill: LLM / generation" style="ellipse;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;" vertex="1" parent="legend">
+      <mxGeometry x="10" y="165" width="120" height="40" as="geometry" />
+    </mxCell>
+    <mxCell id="l6" value="Red fill: user-facing / API" style="rounded=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;" vertex="1" parent="legend">
+      <mxGeometry x="150" y="165" width="120" height="40" as="geometry" />
+    </mxCell>
+
+  </root>
+</mxGraphModel>
