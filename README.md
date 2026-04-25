@@ -499,3 +499,6 @@ npm run dev
 The manual experiment logs for RAGhana can be found in the below directory:
 (see: [docs/experiment_logs.md](docs/experiment_logs.md))
 
+
+Link to the UI : https://raghana-ai.onrender.com/
+
