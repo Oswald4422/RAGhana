@@ -1,9 +1,8 @@
 # RAGhana: A Domain-Specific Retrieval-Augmented Generation System for Ghana Public Data
 
-**Institution:** Academic City University  (ACITY)  
-**Course:** Introduction to Artificial Intelligence  
-**Name:** Oswald Mawuli Lavoe  
-**Roll Number:** 10022200082  
+
+**Author:** Oswald Mawuli Lavoe | **Version:** v1.0.0
+
 
 
 ---
@@ -23,9 +22,6 @@ This project applies RAG to a domain of direct civic relevance: Ghana's electora
 A hard constraint governs the entire implementation: **no end-to-end RAG framework** (LangChain, LlamaIndex, Haystack, DSPy, or LangGraph) may be used. Every component must be implemented from scratch. This constraint serves a pedagogical purpose — it demands a thorough understanding of each stage of the RAG pipeline, rather than opaque orchestration through a library abstraction layer.
 
 ---
-
-## 2. System Architecture
-
 
 ## 2. System Architecture
 
@@ -499,3 +495,8 @@ npm run dev
 The manual experiment logs for RAGhana can be found in the below directory:
 (see: [docs/experiment_logs.md](docs/experiment_logs.md))
 
+
+
+Link to GitHub Repo : https://github.com/Oswald4422/RAGhana.git
+
+Link to the UI : https://raghana-ai.onrender.com/
